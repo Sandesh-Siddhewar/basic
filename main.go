@@ -65,6 +65,20 @@ func updatePerson(c *gin.Context) {
 
 }
 
+func deletePerson(c *gin.Context) {
+
+	id := c.Param("id")
+
+	for i, persons := range person {
+		if persons.Id == id {
+			person = append(person[:i], person[i+1:]...)
+			c.JSON(http.StatusOK, gin.H{"Meassage": "Deleted"})
+			return
+		}
+	}
+	c.JSON(http.StatusNotFound, gin.H{"Meassage": "Person not found"})
+}
+
 func main() {
 	router := gin.Default()
 
