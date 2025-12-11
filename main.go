@@ -45,11 +45,32 @@ func createPerson(c *gin.Context) {
 	c.JSON(http.StatusCreated, Person)
 
 }
+func updatePerson(c *gin.Context) {
+
+	id := c.Param("id")
+
+	var updated Person
+
+	if err := c.BindJSON(&updated); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+	}
+	for i, persons := range person {
+		if persons.Id == id {
+			person[i] = updated
+			c.JSON(http.StatusOK, updated)
+			return
+		}
+	}
+	c.JSON(http.StatusNotFound, gin.H{"message": "Person not found"})
+
+}
+
 func main() {
 	router := gin.Default()
 
 	router.GET("/persons", getPersons)
 	router.GET("/person/:id", getPerson)
-	router.POST("Person", createPerson)
+	router.POST("person", createPerson)
+	router.PUT("/person/:id", updatePerson)
 	router.Run(":8081")
 }
