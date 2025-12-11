@@ -86,5 +86,6 @@ func main() {
 	router.GET("/person/:id", getPerson)
 	router.POST("person", createPerson)
 	router.PUT("/person/:id", updatePerson)
+	router.DELETE("person/:id", deletePerson)
 	router.Run(":8081")
 }
