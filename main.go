@@ -50,5 +50,6 @@ func main() {
 
 	router.GET("/persons", getPersons)
 	router.GET("/person/:id", getPerson)
+	router.POST("Person", createPerson)
 	router.Run(":8081")
 }
