@@ -35,6 +35,14 @@ func getPerson(c *gin.Context) {
 }
 
 func createPerson(c *gin.Context) {
+	var newPerson Person
+
+	if err := c.BindJSON(&newPerson); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	Person := append(person, newPerson)
+	c.JSON(http.StatusCreated, Person)
 
 }
 func main() {
