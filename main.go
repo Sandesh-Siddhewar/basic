@@ -25,13 +25,13 @@ func getPersons(c *gin.Context) {
 func getPerson(c *gin.Context) {
 	id := c.Param("id")
 
-	for _, person := range person {
-		if person.Id == id {
+	for _, p := range person {
+		if p.Id == id {
 			c.JSON(http.StatusOK, person)
 			return
 		}
 	}
-	c.JSON(http.StatusNotFound, gin.H{"Message": "Person not found"})
+	c.JSON(http.StatusNotFound, gin.H{"message": "Person not found"})
 }
 
 func createPerson(c *gin.Context) {
@@ -41,8 +41,8 @@ func createPerson(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	Person := append(person, newPerson)
-	c.JSON(http.StatusCreated, Person)
+	person = append(person, newPerson)
+	c.JSON(http.StatusCreated, person)
 
 }
 func updatePerson(c *gin.Context) {
@@ -53,6 +53,7 @@ func updatePerson(c *gin.Context) {
 
 	if err := c.BindJSON(&updated); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
 	}
 	for i, persons := range person {
 		if persons.Id == id {
@@ -72,11 +73,11 @@ func deletePerson(c *gin.Context) {
 	for i, persons := range person {
 		if persons.Id == id {
 			person = append(person[:i], person[i+1:]...)
-			c.JSON(http.StatusOK, gin.H{"Meassage": "Deleted"})
+			c.JSON(http.StatusOK, gin.H{"message": "Deleted"})
 			return
 		}
 	}
-	c.JSON(http.StatusNotFound, gin.H{"Meassage": "Person not found"})
+	c.JSON(http.StatusNotFound, gin.H{"message": "Person not found"})
 }
 
 func main() {
@@ -84,7 +85,7 @@ func main() {
 
 	router.GET("/persons", getPersons)
 	router.GET("/person/:id", getPerson)
-	router.POST("person", createPerson)
+	router.POST("/person", createPerson)
 	router.PUT("/person/:id", updatePerson)
 	router.DELETE("/person/:id", deletePerson)
 	router.Run(":8081")
